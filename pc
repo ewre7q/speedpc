@@ -1,31 +1,10 @@
-local plr = game:GetService('Players').LocalPlayer
-local down = true
- 
--- Function to activate speed boost
-function onButton1Down(mouse)
-    down = true
-    while down do
-        if not down then break end
-        local char = plr.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            char.HumanoidRootPart.Velocity = char.HumanoidRootPart.CFrame.lookVector * 190
-        end
-        wait()
-    end
-end
- 
--- Function to stop speed boost
-function onButton1Up(mouse)
-    down = false
-end
- 
 -- Speed Keybinding
 function onSelected(mouse)
     mouse.KeyDown:connect(function(key)
-        if key:lower() == "Z" then
+        if key:lower() == "z" then
             onButton1Down(mouse)
-        elseif key:lower() == "" then
-            -- Toggles hitbox visibility when "X" is pressed
+        elseif key:lower() == "9" then
+            -- Toggles hitbox visibility when "9" is pressed
             getgenv().Config['HideBoxes'] = not getgenv().Config['HideBoxes']
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Hitbox Toggled",
@@ -34,21 +13,21 @@ function onSelected(mouse)
             })
         end
     end)
- 
+
     mouse.KeyUp:connect(function(key)
-        if key:lower() == "q" then
+        if key:lower() == "z" then
             onButton1Up(mouse)
         end
     end)
 end
- 
+
 -- Initiate keybinding for the local player
 onSelected(plr:GetMouse())
- 
+
 -- Notification for Speed Script Enabled
 game.StarterGui:SetCore("SendNotification", {
     Title = "Speed Enabled",
     Text = "Press Z for Speed",
     Duration = 5,
 })
- 
+

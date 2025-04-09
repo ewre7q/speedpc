@@ -1,33 +1,39 @@
--- Speed Keybinding
-function onSelected(mouse)
-    mouse.KeyDown:connect(function(key)
-        if key:lower() == "z" then
-            onButton1Down(mouse)
-        elseif key:lower() == "9" then
-            -- Toggles hitbox visibility when "9" is pressed
-            getgenv().Config['HideBoxes'] = not getgenv().Config['HideBoxes']
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Hitbox Toggled",
-                Text = getgenv().Config['HideBoxes'] and "Hitboxes Hidden" or "Hitboxes Visible",
-                Duration = 1.5,
-            })
-        end
-    end)
+local UIS = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
-    mouse.KeyUp:connect(function(key)
-        if key:lower() == "z" then
-            onButton1Up(mouse)
-        end
-    end)
+local speedOn = false
+local normalSpeed = 16 -- Roblox default
+local boostedSpeed = 200
+local toggleKey = Enum.KeyCode.Z -- Tuşu buradan değişebilirsin
+
+-- Bildirim fonksiyonu
+local function notify(text)
+    StarterGui:SetCore("SendNotification", {
+        Title = "Speed enabled⭐",
+        Text = text,
+        Duration = 2
+    })
 end
 
--- Initiate keybinding for the local player
-onSelected(plr:GetMouse())
+-- Tuş algılayıcı
+UIS.InputBegan:Connect(function(input, isTyping)
+    if isTyping then return end
+    if input.KeyCode == toggleKey then
+        speedOn = not speedOn
 
--- Notification for Speed Script Enabled
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Speed Enabled",
-    Text = "Press Z for Speed",
-    Duration = 5,
-})
+        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
 
+        if humanoid then
+            if speedOn then
+                humanoid.WalkSpeed = boostedSpeed
+                notify("17 fake macro 🚀")
+            else
+                humanoid.WalkSpeed = normalSpeed
+                notify("slow down ⛔")
+            end
+        end
+    end
+end)
